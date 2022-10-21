@@ -17,7 +17,8 @@ model = tf.saved_model.load("export_model/saved_model")
 
 category_index = label_map_util.create_category_index_from_labelmap("data/label_map.txt", use_display_name=True)
 
-cap = cv2.VideoCapture('data/test/test_2_Trim.mp4')
+# cap = cv2.VideoCapture('data/test/3_Trim.mp4')
+cap = cv2.VideoCapture(0)
 
 
 def crop(img):
@@ -41,10 +42,11 @@ while (cap.isOpened()):
     # print(type(frame))
     if not ret:
         break
-    image_np = frame
+    image_np = crop(frame)
+    # image_np = frame
     # print("Done load image ")
     # image_np = cv2.resize(image_np, dsize=(480,640), fx=0.5, fy=0.5)
-    image_np = cv2.resize(image_np, dsize=None, fx=0.5, fy=0.5)
+    # image_np = cv2.resize(image_np, dsize=None, fx=0.5, fy=0.5)
     output_dict = run_inference_for_single_image(model, image_np)
     # print("Done inference")
     boxes = detect_face(image_np, output_dict, thresding=0.4)
@@ -58,9 +60,9 @@ while (cap.isOpened()):
     print(count_drowsiness)
     vis_util.visualize_boxes_and_labels_on_image_array(
         image_np,
-        output_dict['detection_boxes'],
-        output_dict['detection_classes'],
-        output_dict['detection_scores'],
+        output_dict['detection_boxes'][:4],
+        output_dict['detection_classes'][:4],
+        output_dict['detection_scores'][:4],
         category_index,
         min_score_thresh=.4,
         instance_masks=output_dict.get('detection_masks_reframed', None),
@@ -70,7 +72,6 @@ while (cap.isOpened()):
         count_drowsiness = 0
         try:
             if not alarmed:
-
                 alarmed = True
                 # Duong dan den file wav
 
@@ -84,7 +85,6 @@ while (cap.isOpened()):
         alarmed = False
     # print("Done draw on image ")
     # image_np = cv2.resize(image_np, dsize=None, fx=0.5, fy=0.5)
-
     # img = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
     cv2.imshow('window', image_np)
     cv2.waitKey(10)
