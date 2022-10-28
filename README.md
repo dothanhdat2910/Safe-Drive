@@ -7,5 +7,5 @@ Xác định khoảng cách điểm trên và điểm dưới của mắt đưa 
 Phát cảnh báo khi tài xế sử dụng điện thoại, đồ uống hoặc không thắt dây an toàn, buồn ngủ
 
 Hướng dẫn cập nhật thư viện cần sử dụng trong project tại terminal:  
-!git clone https://github.com/tensorflow/models.git  
-pip install -r requirements.txt  
+  !git clone https://github.com/tensorflow/models.git  
+  pip install -r requirements.txt  
